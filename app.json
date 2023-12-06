@@ -13,9 +13,14 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "infoPList": {
+        "NSMicrophoneUsageDescription": "This app uses the microphone to record your chat input.",
+        "NSSpeechRecognitionUsageDescription": "This app uses speech recognition for chat input."
+      },
       "supportsTablet": true
     },
     "android": {
+      "permissions": ["android.permission.RECORD_AUDIO"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
