@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     flex: 2,
     elevation: 8,
-    shadowRadius: 12,
-    shadowOpacity: 1,
+    shadowRadius: 8,
+    shadowOpacity: 0.5,
     shadowOffset: {
-      width: 0.75,
-      height: 0.75,
+      width: 3,
+      height: 3,
     },
   },
   flex: {
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
   },
   sender: {
     backgroundColor: COLORS.senderChat,

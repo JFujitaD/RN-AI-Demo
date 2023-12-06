@@ -1,13 +1,20 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Keyboard } from 'react-native';
 
 export default function ChatBox({ onSend }) {
   const [chatValue, setChatValue] = useState('');
 
-  const handleTextChange = useCallback((text) => {
+  const handleTextChange = (text) => {
     setChatValue(text);
-  }, []);
+  };
+
+  const handleOnSend = () => {
+    onSend(chatValue);
+    setChatValue('');
+    Keyboard.dismiss();
+  };
 
   return (
     <View style={styles.root}>
@@ -19,7 +26,7 @@ export default function ChatBox({ onSend }) {
         autoCapitalize={'sentences'}
         autoCorrect
       />
-      <Pressable onPress={() => onSend(chatValue)}>
+      <Pressable onPress={handleOnSend}>
         <Ionicons name='send-outline' size={20} />
       </Pressable>
     </View>
@@ -37,7 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   textInput: {
-    fontSize: 18,
+    fontSize: 16,
     flex: 1,
     marginRight: 8,
   },

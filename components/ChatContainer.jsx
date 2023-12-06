@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
 
 import ChatList from './ChatList';
 import ChatBox from './ChatBox';
@@ -28,18 +28,21 @@ export default function ChatContainer() {
     },
   ]);
 
-  const handleOnSend = useCallback((message) => {
+  const handleOnSend = (message) => {
     setChats((oldChats) => [
       ...oldChats,
       { id: new Date().getMilliseconds(), message, isSender: true },
     ]);
-  }, []);
+  };
 
   return (
-    <View style={styles.root}>
+    <KeyboardAvoidingView
+      style={styles.root}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <ChatList chats={chats} />
       <ChatBox onSend={handleOnSend} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

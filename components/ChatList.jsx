@@ -1,12 +1,11 @@
-import { useCallback } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 
 import ChatItem from './ChatItem';
 
 export default function ChatList({ chats }) {
-  const renderChatItem = useCallback((chatItem) => {
+  const renderChatItem = (chatItem) => {
     return <ChatItem chatItem={chatItem} />;
-  }, []);
+  };
 
   return (
     <FlatList
