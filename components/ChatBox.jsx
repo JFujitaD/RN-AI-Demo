@@ -5,6 +5,7 @@ import { Keyboard } from 'react-native';
 import { Audio } from 'expo-av';
 
 import RecordingModal from './RecordingModal';
+import { convertToText } from '../utils/dictationServices';
 
 export default function ChatBox({ onSend }) {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
@@ -42,6 +43,7 @@ export default function ChatBox({ onSend }) {
       await recordingData.stopAndUnloadAsync();
       const uri = recordingData.getURI();
       setRecordingData(undefined);
+      await convertToText(uri);
     } catch (e) {
       Alert.alert('Failed to stop recording');
     }
