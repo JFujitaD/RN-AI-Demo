@@ -11,6 +11,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Keyboard } from 'react-native';
 import { Audio } from 'expo-av';
 
+import { debug } from '../utils/dictationServices';
+
 export default function ChatBox({ onSend }) {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [chatValue, setChatValue] = useState('');
@@ -26,7 +28,9 @@ export default function ChatBox({ onSend }) {
     Keyboard.dismiss();
   };
 
-  const dictate = async () => {};
+  const dictate = async () => {
+    debug();
+  };
 
   const handleOnDictate = async () => {
     if (!permissionResponse.granted) {
