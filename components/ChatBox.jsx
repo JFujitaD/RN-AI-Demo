@@ -4,9 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { Keyboard } from 'react-native';
 import { Audio } from 'expo-av';
 
+import RecordingModal from './RecordingModal';
+
 export default function ChatBox({ onSend }) {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [chatValue, setChatValue] = useState('');
+  const [recordingData, setRecordingData] = useState();
 
   const handleTextChange = (text) => {
     setChatValue(text);
@@ -28,19 +31,20 @@ export default function ChatBox({ onSend }) {
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
-      console.log('Recording...');
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      stopRecording(recording);
+      setRecordingData(recording);
     } catch (e) {
       Alert.alert('Failed to start recording');
-      console.error(e);
     }
   };
 
-  const stopRecording = async (recording) => {
-    await recording.stopAndUnloadAsync();
-    const uri = recording.getURI();
-    console.log(uri);
+  const stopRecording = async () => {
+    try {
+      await recordingData.stopAndUnloadAsync();
+      const uri = recordingData.getURI();
+      setRecordingData(undefined);
+    } catch (e) {
+      Alert.alert('Failed to stop recording');
+    }
   };
 
   const handleOnDictate = async () => {
@@ -61,6 +65,10 @@ export default function ChatBox({ onSend }) {
 
   return (
     <View style={styles.root}>
+      <RecordingModal
+        isShown={!!recordingData}
+        onStopRecording={stopRecording}
+      />
       <TextInput
         style={styles.textInput}
         placeholder='Ask your question here...'
