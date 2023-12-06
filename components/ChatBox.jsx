@@ -25,21 +25,21 @@ export default function ChatBox({ onSend }) {
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
-      const { recording: recordResponse } = await Audio.Recording.createAsync(
+      const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
       console.log('Recording...');
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      stopRecording(recordResponse);
+      stopRecording(recording);
     } catch (e) {
       Alert.alert('Failed to start recording');
       console.error(e);
     }
   };
 
-  const stopRecording = async (recordResponse) => {
-    await recordResponse.stopAndUnloadAsync();
-    const uri = recordResponse.getURI();
+  const stopRecording = async (recording) => {
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
     console.log(uri);
   };
 
