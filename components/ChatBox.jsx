@@ -1,17 +1,8 @@
 import { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  Alert,
-} from 'react-native';
+import { StyleSheet, View, TextInput, Pressable, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Keyboard } from 'react-native';
 import { Audio } from 'expo-av';
-
-import { debug } from '../utils/dictationServices';
 
 export default function ChatBox({ onSend }) {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
@@ -28,8 +19,28 @@ export default function ChatBox({ onSend }) {
     Keyboard.dismiss();
   };
 
-  const dictate = async () => {
-    debug();
+  const startRecording = async () => {
+    try {
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      const { recording: recordResponse } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      console.log('Recording...');
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      stopRecording(recordResponse);
+    } catch (e) {
+      Alert.alert('Failed to start recording');
+      console.error(e);
+    }
+  };
+
+  const stopRecording = async (recordResponse) => {
+    await recordResponse.stopAndUnloadAsync();
+    const uri = recordResponse.getURI();
+    console.log(uri);
   };
 
   const handleOnDictate = async () => {
@@ -44,7 +55,7 @@ export default function ChatBox({ onSend }) {
       }
     } else {
       // Start dictation
-      dictate();
+      startRecording();
     }
   };
 
