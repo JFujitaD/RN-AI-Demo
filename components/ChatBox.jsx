@@ -5,7 +5,7 @@ import { Keyboard } from 'react-native';
 import { Audio } from 'expo-av';
 
 import RecordingModal from './RecordingModal';
-import { convertToText } from '../utils/dictationServices';
+import { getAIResponse } from '../utils/aiServices';
 
 export default function ChatBox({ onSend }) {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
@@ -16,11 +16,14 @@ export default function ChatBox({ onSend }) {
     setChatValue(text);
   };
 
-  const handleOnSend = () => {
+  const handleOnSend = async () => {
     if (chatValue.length === 0) return;
-    onSend(chatValue);
+    onSend(chatValue, true);
     setChatValue('');
     Keyboard.dismiss();
+
+    const responseMessage = await getAIResponse(chatValue);
+    onSend(responseMessage, false);
   };
 
   const startRecording = async () => {
@@ -43,7 +46,7 @@ export default function ChatBox({ onSend }) {
       await recordingData.stopAndUnloadAsync();
       const uri = recordingData.getURI();
       setRecordingData(undefined);
-      await convertToText(uri);
+      // TODO Enable
     } catch (e) {
       Alert.alert('Failed to stop recording');
     }
